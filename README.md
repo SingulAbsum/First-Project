@@ -114,20 +114,3 @@ This project demonstrates experience with:
 * Business logic implementation
 
 ---
-
-# Future Improvements
-
-Planned enhancements include:
-
-* Improved MVC architecture
-* Service and repository layers
-* Dependency injection
-* Better exception handling
-* Validation framework
-* FXML-based UI refactoring
-* Enhanced reporting
-* Automated testing
-* Modern project structure (Maven/Gradle)
-* Cleaner package organization
-
----
