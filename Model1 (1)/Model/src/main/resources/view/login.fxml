@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane styleClass="login-root" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.com.model1.controller.LoginController">
+    <fx:define>
+        <ToggleGroup fx:id="roleGroup" />
+    </fx:define>
+    <children>
+        <Pane styleClass="ambient-grid" />
+        <BorderPane maxHeight="720.0" maxWidth="1180.0" styleClass="login-frame">
+            <left>
+                <VBox prefWidth="570.0" spacing="32.0" styleClass="login-hero">
+                    <padding>
+                        <Insets bottom="48.0" left="48.0" right="48.0" top="48.0" />
+                    </padding>
+                    <children>
+                        <HBox alignment="CENTER_LEFT" spacing="14.0">
+                            <children>
+                                <Region prefHeight="34.0" prefWidth="34.0" styleClass="brand-glyph" />
+                                <VBox spacing="2.0">
+                                    <children>
+                                        <Label styleClass="brand-title" text="MODEL1" />
+                                        <Label styleClass="brand-caption" text="STORE COMMAND" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+                        <VBox spacing="16.0">
+                            <children>
+                                <Label styleClass="hero-title" text="Retail ops with a sharper pulse." wrapText="true" />
+                                <Label styleClass="hero-copy" text="A modern JavaFX command surface for billing, stock, reports, and employee control." wrapText="true" />
+                            </children>
+                        </VBox>
+                        <HBox spacing="14.0" styleClass="signal-strip">
+                            <children>
+                                <VBox spacing="4.0" styleClass="signal-card">
+                                    <children>
+                                        <Label styleClass="signal-value" text="v2" />
+                                        <Label styleClass="signal-label" text="Schema ready" />
+                                    </children>
+                                </VBox>
+                                <VBox spacing="4.0" styleClass="signal-card">
+                                    <children>
+                                        <Label styleClass="signal-value" text="MVC" />
+                                        <Label styleClass="signal-label" text="Layered flow" />
+                                    </children>
+                                </VBox>
+                                <VBox spacing="4.0" styleClass="signal-card">
+                                    <children>
+                                        <Label styleClass="signal-value" text="FX" />
+                                        <Label styleClass="signal-label" text="FXML + CSS" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+            </left>
+            <center>
+                <VBox alignment="CENTER_LEFT" maxWidth="440.0" spacing="22.0" styleClass="login-panel">
+                    <padding>
+                        <Insets bottom="44.0" left="42.0" right="42.0" top="44.0" />
+                    </padding>
+                    <children>
+                        <VBox spacing="8.0">
+                            <children>
+                                <Label styleClass="panel-kicker" text="Secure access" />
+                                <Label styleClass="panel-title" text="Sign in" />
+                            </children>
+                        </VBox>
+                        <HBox spacing="8.0" styleClass="role-switcher">
+                            <children>
+                                <ToggleButton fx:id="cashierToggle" maxWidth="1.7976931348623157E308" onAction="#clearStatus" selected="true" text="Cashier" toggleGroup="$roleGroup" HBox.hgrow="ALWAYS" />
+                                <ToggleButton fx:id="managerToggle" maxWidth="1.7976931348623157E308" onAction="#clearStatus" text="Manager" toggleGroup="$roleGroup" HBox.hgrow="ALWAYS" />
+                                <ToggleButton fx:id="administratorToggle" maxWidth="1.7976931348623157E308" onAction="#clearStatus" text="Admin" toggleGroup="$roleGroup" HBox.hgrow="ALWAYS" />
+                            </children>
+                        </HBox>
+                        <VBox spacing="12.0">
+                            <children>
+                                <TextField fx:id="usernameField" promptText="Username" styleClass="modern-input" />
+                                <PasswordField fx:id="passwordField" onAction="#handleLogin" promptText="Password" styleClass="modern-input" />
+                            </children>
+                        </VBox>
+                        <Button fx:id="signInButton" maxWidth="1.7976931348623157E308" onAction="#handleLogin" styleClass="primary-button" text="Enter dashboard" />
+                        <Label fx:id="statusLabel" minHeight="24.0" styleClass="status-line" wrapText="true" />
+                    </children>
+                </VBox>
+            </center>
+        </BorderPane>
+    </children>
+</StackPane>

@@ -1,0 +1,6 @@
+{
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.import.eclipse.enabled": true,
+  "java.debug.settings.vmArgs": "--module-path \"C:/Users/User/Downloads/javafx-sdk-23.0.1/lib\" --add-modules javafx.controls,javafx.graphics,javafx.fxml --enable-native-access=javafx.graphics,org.xerial.sqlitejdbc",
+
+}

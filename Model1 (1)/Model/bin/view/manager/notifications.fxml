@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:id="rootPane" styleClass="module-root" userData="MANAGER_NOTIFICATIONS" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.com.model1.controller.ModuleController">
+    <center>
+        <VBox spacing="16.0">
+            <padding><Insets bottom="28.0" left="28.0" right="28.0" top="28.0" /></padding>
+            <children>
+                <HBox alignment="CENTER_LEFT" spacing="12.0">
+                    <children>
+                        <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label fx:id="routeLabel" styleClass="panel-kicker" text="Manager / Notifications" />
+                                <Label styleClass="dashboard-title" text="Notifications" />
+                                <Label styleClass="dashboard-subtitle" text="Low-stock alerts collected into a clean resolution queue." />
+                            </children>
+                        </VBox>
+                        <Button onAction="#backToDashboard" styleClass="ghost-button" text="Dashboard" />
+                        <Button onAction="#signOut" styleClass="sidebar-button" text="Sign out" />
+                    </children>
+                </HBox>
+                <HBox spacing="12.0" styleClass="module-toolbar">
+                    <children>
+                        <Button onAction="#refreshData" styleClass="primary-button" text="Refresh alerts" />
+                        <Button onAction="#resolveSelected" styleClass="ghost-button" text="Resolve selected" />
+                    </children>
+                </HBox>
+                <TableView fx:id="moduleTable" prefHeight="500.0" styleClass="modern-table">
+                    <columns>
+                        <TableColumn fx:id="itemColumn" text="Product" />
+                        <TableColumn fx:id="detailColumn" text="Sector" />
+                        <TableColumn fx:id="statusColumn" text="Alert status" />
+                    </columns>
+                </TableView>
+                <Label fx:id="statusLabel" minHeight="28.0" styleClass="status-line" wrapText="true" />
+            </children>
+        </VBox>
+    </center>
+</BorderPane>

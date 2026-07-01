@@ -1,0 +1,2 @@
+camera 1x25.0 Total:25.0
+Total: 25.00

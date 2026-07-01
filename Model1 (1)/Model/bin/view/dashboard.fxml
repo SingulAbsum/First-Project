@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane styleClass="dashboard-root" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.com.model1.controller.DashboardController">
+    <left>
+        <VBox prefWidth="280.0" spacing="24.0" styleClass="sidebar">
+            <padding>
+                <Insets bottom="28.0" left="24.0" right="24.0" top="30.0" />
+            </padding>
+            <children>
+                <HBox alignment="CENTER_LEFT" spacing="12.0">
+                    <children>
+                        <Region prefHeight="30.0" prefWidth="30.0" styleClass="brand-glyph" />
+                        <VBox spacing="1.0">
+                            <children>
+                                <Label styleClass="brand-title" text="MODEL1" />
+                                <Label styleClass="brand-caption" text="COMMAND" />
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+                <VBox spacing="8.0" styleClass="operator-chip">
+                    <children>
+                        <Label styleClass="chip-label" text="Active operator" />
+                        <Label fx:id="activeUserLabel" styleClass="chip-value" text="Operator / Role" />
+                    </children>
+                </VBox>
+                <VBox spacing="10.0">
+                    <children>
+                        <Button maxWidth="1.7976931348623157E308" onAction="#handleSignOut" styleClass="sidebar-button" text="Sign out" />
+                    </children>
+                </VBox>
+                <Region VBox.vgrow="ALWAYS" />
+                <VBox spacing="8.0" styleClass="phase-chip">
+                    <children>
+                        <Label styleClass="chip-label" text="Migration phase" />
+                        <Label styleClass="chip-value" text="Phase 8 UI shell" />
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+    </left>
+    <center>
+        <ScrollPane fitToHeight="true" fitToWidth="true" styleClass="dashboard-scroll">
+            <content>
+                <VBox spacing="24.0" styleClass="dashboard-content">
+                    <padding>
+                        <Insets bottom="34.0" left="34.0" right="34.0" top="34.0" />
+                    </padding>
+                    <children>
+                        <VBox spacing="8.0">
+                            <children>
+                                <Label fx:id="dashboardTitle" styleClass="dashboard-title" text="Dashboard" />
+                                <Label fx:id="dashboardSubtitle" styleClass="dashboard-subtitle" text="Modern JavaFX workspace" wrapText="true" />
+                            </children>
+                        </VBox>
+                        <StackPane minHeight="260.0" styleClass="hero-panel">
+                            <children>
+                                <Region fx:id="scanLine" prefHeight="260.0" prefWidth="120.0" styleClass="scan-line" />
+                                <VBox alignment="CENTER_LEFT" spacing="10.0">
+                                    <padding>
+                                        <Insets bottom="34.0" left="38.0" right="38.0" top="34.0" />
+                                    </padding>
+                                    <children>
+                                        <Label fx:id="heroKicker" styleClass="hero-kicker" text="Workspace" />
+                                        <Label fx:id="heroMetric" styleClass="hero-metric" text="Ready" wrapText="true" />
+                                        <Label fx:id="heroCaption" maxWidth="720.0" styleClass="hero-caption" text="Role-aware operations dashboard." wrapText="true" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </StackPane>
+                        <HBox spacing="16.0">
+                            <children>
+                                <VBox spacing="5.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <Label styleClass="stat-label" text="Products" />
+                                        <Label fx:id="statProducts" styleClass="stat-value" text="--" />
+                                    </children>
+                                </VBox>
+                                <VBox spacing="5.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <Label styleClass="stat-label" text="Low stock" />
+                                        <Label fx:id="statLowStock" styleClass="stat-value" text="--" />
+                                    </children>
+                                </VBox>
+                                <VBox spacing="5.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <Label styleClass="stat-label" text="Notifications" />
+                                        <Label fx:id="statNotifications" styleClass="stat-value" text="--" />
+                                    </children>
+                                </VBox>
+                                <VBox spacing="5.0" styleClass="stat-card" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <Label styleClass="stat-label" text="Mode" />
+                                        <Label fx:id="statMode" styleClass="stat-value-small" text="Role" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+                        <HBox spacing="20.0">
+                            <children>
+                                <VBox prefWidth="360.0" spacing="12.0">
+                                    <children>
+                                        <Label styleClass="section-title" text="Actions" />
+                                        <VBox fx:id="primaryActions" spacing="12.0" />
+                                        <Label fx:id="statusLabel" minHeight="28.0" styleClass="status-line" wrapText="true" />
+                                    </children>
+                                </VBox>
+                                <VBox spacing="12.0" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <Label styleClass="section-title" text="Workspace preview" />
+                                        <TableView fx:id="previewTable" prefHeight="326.0" styleClass="modern-table">
+                                            <columns>
+                                                <TableColumn fx:id="itemColumn" minWidth="150.0" text="Workstream" />
+                                                <TableColumn fx:id="detailColumn" minWidth="260.0" text="Detail" />
+                                                <TableColumn fx:id="statusColumn" minWidth="130.0" text="Status" />
+                                            </columns>
+                                        </TableView>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+</BorderPane>

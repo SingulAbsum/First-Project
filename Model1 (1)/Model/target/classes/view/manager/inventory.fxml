@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:id="rootPane" styleClass="module-root" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.com.model1.controller.InventoryController">
+    <top>
+        <VBox spacing="12.0" styleClass="module-header">
+            <padding><Insets bottom="24.0" left="28.0" right="28.0" top="28.0" /></padding>
+            <children>
+                <HBox alignment="CENTER_LEFT" spacing="12.0">
+                    <children>
+                        <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label styleClass="panel-kicker" text="Manager / Inventory" />
+                                <Label styleClass="dashboard-title" text="Inventory" />
+                                <Label styleClass="dashboard-subtitle" text="List products, add stock, create supplier categories, and resolve low-stock signals through refills." />
+                            </children>
+                        </VBox>
+                        <Button onAction="#backToDashboard" styleClass="ghost-button" text="Dashboard" />
+                        <Button onAction="#signOut" styleClass="sidebar-button" text="Sign out" />
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </top>
+    <center>
+        <VBox spacing="16.0">
+            <padding><Insets bottom="28.0" left="28.0" right="28.0" top="28.0" /></padding>
+            <children>
+                <HBox spacing="12.0" styleClass="module-toolbar">
+                    <children>
+                        <TextField fx:id="searchField" promptText="Filter products, supplier id, or sector" styleClass="modern-input" HBox.hgrow="ALWAYS" />
+                        <Button onAction="#refreshData" styleClass="primary-button" text="Refresh" />
+                    </children>
+                </HBox>
+                <GridPane hgap="12.0" styleClass="module-toolbar" vgap="12.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="ALWAYS" minWidth="190.0" />
+                        <ColumnConstraints minWidth="110.0" />
+                        <ColumnConstraints minWidth="130.0" />
+                        <ColumnConstraints minWidth="110.0" />
+                        <ColumnConstraints hgrow="ALWAYS" minWidth="240.0" />
+                    </columnConstraints>
+                    <children>
+                        <TextField fx:id="productNameField" promptText="Product name" styleClass="modern-input" GridPane.columnIndex="0" />
+                        <TextField fx:id="quantityField" promptText="Qty" styleClass="modern-input" GridPane.columnIndex="1" />
+                        <TextField fx:id="priceField" promptText="Price" styleClass="modern-input" GridPane.columnIndex="2" />
+                        <TextField fx:id="sectorField" promptText="Sector" styleClass="modern-input" GridPane.columnIndex="3" />
+                        <ComboBox fx:id="supplierComboBox" maxWidth="Infinity" promptText="Supplier" styleClass="modern-combo" GridPane.columnIndex="4" />
+                        <TextField fx:id="refillQuantityField" promptText="Refill qty" styleClass="modern-input" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                        <TextField fx:id="newSupplierNameField" promptText="New supplier name" styleClass="modern-input" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+                        <TextField fx:id="newSupplierCategoryField" promptText="New category" styleClass="modern-input" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+                    </children>
+                </GridPane>
+                <HBox spacing="12.0">
+                    <children>
+                        <Button onAction="#addProduct" styleClass="primary-button" text="Add product" />
+                        <Button onAction="#addCategory" styleClass="ghost-button" text="Add supplier category" />
+                        <Button onAction="#refillProduct" styleClass="ghost-button" text="Refill selected" />
+                    </children>
+                </HBox>
+                <TableView fx:id="productTable" prefHeight="430.0" styleClass="modern-table" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="productColumn" prefWidth="300.0" text="Product" />
+                        <TableColumn fx:id="stockColumn" prefWidth="110.0" text="Stock" />
+                        <TableColumn fx:id="priceColumn" prefWidth="130.0" text="Price" />
+                        <TableColumn fx:id="supplierColumn" prefWidth="130.0" text="Supplier" />
+                        <TableColumn fx:id="sectorColumn" prefWidth="110.0" text="Sector" />
+                        <TableColumn fx:id="statusColumn" prefWidth="160.0" text="Status" />
+                    </columns>
+                </TableView>
+                <Label fx:id="statusLabel" minHeight="28.0" styleClass="status-line" wrapText="true" />
+            </children>
+        </VBox>
+    </center>
+</BorderPane>

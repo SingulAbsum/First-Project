@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:id="rootPane" styleClass="module-root" userData="MANAGER_REPORTS" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.com.model1.controller.ReportController">
+    <top>
+        <VBox spacing="12.0" styleClass="module-header">
+            <padding><Insets bottom="24.0" left="28.0" right="28.0" top="28.0" /></padding>
+            <children>
+                <HBox alignment="CENTER_LEFT" spacing="12.0">
+                    <children>
+                        <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label styleClass="panel-kicker" text="Manager / Reports" />
+                                <Label styleClass="dashboard-title" text="Reports" />
+                                <Label styleClass="dashboard-subtitle" text="Generate cashier and sales summaries from the centralized report service." />
+                            </children>
+                        </VBox>
+                        <Button onAction="#backToDashboard" styleClass="ghost-button" text="Dashboard" />
+                        <Button onAction="#signOut" styleClass="sidebar-button" text="Sign out" />
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </top>
+    <center>
+        <VBox spacing="16.0">
+            <padding><Insets bottom="28.0" left="28.0" right="28.0" top="28.0" /></padding>
+            <children>
+                <HBox spacing="12.0" styleClass="module-toolbar">
+                    <children>
+                        <TextField fx:id="cashierField" promptText="Cashier name" styleClass="modern-input" HBox.hgrow="ALWAYS" />
+                        <TextField fx:id="startDateField" promptText="Start date" styleClass="modern-input" />
+                        <TextField fx:id="endDateField" promptText="End date" styleClass="modern-input" />
+                        <Button onAction="#generateCashierReport" styleClass="ghost-button" text="Cashier report" />
+                        <Button onAction="#generateSalesReport" styleClass="primary-button" text="Sales report" />
+                    </children>
+                </HBox>
+                <HBox spacing="12.0">
+                    <children>
+                        <VBox spacing="3.0" styleClass="summary-tile" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label styleClass="stat-label" text="REPORT" />
+                                <Label fx:id="reportTypeLabel" styleClass="bill-count" text="Manager reports" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="3.0" styleClass="summary-tile" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label styleClass="stat-label" text="REVENUE" />
+                                <Label fx:id="revenueLabel" styleClass="bill-total" text="\$0.00" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="3.0" styleClass="summary-tile" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label styleClass="stat-label" text="EXPENSE" />
+                                <Label fx:id="expenseLabel" styleClass="bill-total" text="\$0.00" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="3.0" styleClass="summary-tile" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label styleClass="stat-label" text="BALANCE" />
+                                <Label fx:id="balanceLabel" styleClass="bill-total" text="\$0.00" />
+                            </children>
+                        </VBox>
+                    </children>
+                </HBox>
+                <TableView fx:id="reportTable" prefHeight="430.0" styleClass="modern-table" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="metricColumn" prefWidth="260.0" text="Metric" />
+                        <TableColumn fx:id="valueColumn" prefWidth="220.0" text="Value" />
+                        <TableColumn fx:id="contextColumn" prefWidth="360.0" text="Context" />
+                    </columns>
+                </TableView>
+                <Label fx:id="statusLabel" minHeight="28.0" styleClass="status-line" wrapText="true" />
+            </children>
+        </VBox>
+    </center>
+</BorderPane>

@@ -1,0 +1,8 @@
+Bill #24
+Date: 2026-06-30
+Cashier: kister
+
+monitor 1x200.50 Total:200.50
+monitor 1x200.50 Total:200.50
+
+Total: 401.00

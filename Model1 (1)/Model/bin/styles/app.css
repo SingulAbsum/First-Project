@@ -1,0 +1,408 @@
+.root {
+    -fx-font-family: "Segoe UI", "Inter", "Arial", sans-serif;
+    -fx-text-fill: #f6fbff;
+}
+
+.login-root,
+.dashboard-root,
+.module-root {
+    -fx-background-color:
+        linear-gradient(from 0% 0% to 100% 100%, #071018 0%, #10202d 42%, #192532 100%);
+}
+
+.ambient-grid {
+    -fx-background-color:
+        linear-gradient(from 0% 0% to 100% 100%, rgba(42, 207, 190, 0.16), rgba(242, 112, 89, 0.08), rgba(245, 184, 76, 0.12)),
+        linear-gradient(from 0% 50% to 100% 50%, rgba(255, 255, 255, 0.06) 0%, transparent 45%, rgba(42, 207, 190, 0.08) 100%),
+        linear-gradient(from 50% 0% to 50% 100%, rgba(255, 255, 255, 0.08) 0%, transparent 42%, rgba(245, 184, 76, 0.08) 100%);
+}
+
+.login-frame {
+    -fx-background-color: rgba(8, 17, 25, 0.76);
+    -fx-background-radius: 8;
+    -fx-border-color: rgba(255, 255, 255, 0.12);
+    -fx-border-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.46), 36, 0.18, 0, 18);
+}
+
+.login-hero {
+    -fx-background-color:
+        linear-gradient(from 0% 0% to 100% 100%, rgba(42, 207, 190, 0.30), rgba(18, 37, 50, 0.72) 48%, rgba(242, 112, 89, 0.20) 100%);
+    -fx-background-radius: 8 0 0 8;
+}
+
+.login-panel {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 8;
+    -fx-border-color: rgba(255, 255, 255, 0.14);
+    -fx-border-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.26), 24, 0.12, 0, 14);
+}
+
+.brand-glyph {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #2acfbe, #f5b84c 58%, #f27059);
+    -fx-background-radius: 7;
+    -fx-effect: dropshadow(gaussian, rgba(42, 207, 190, 0.38), 18, 0.25, 0, 0);
+}
+
+.brand-title {
+    -fx-font-size: 18;
+    -fx-font-weight: 800;
+    -fx-text-fill: #f9fbff;
+}
+
+.brand-caption,
+.panel-kicker,
+.hero-kicker,
+.chip-label,
+.stat-label,
+.signal-label {
+    -fx-font-size: 11;
+    -fx-font-weight: 700;
+    -fx-text-fill: rgba(226, 238, 247, 0.70);
+}
+
+.hero-title {
+    -fx-font-size: 52;
+    -fx-font-weight: 900;
+    -fx-line-spacing: 1.0;
+    -fx-text-fill: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.32), 18, 0.10, 0, 8);
+}
+
+.hero-copy,
+.dashboard-subtitle,
+.hero-caption {
+    -fx-font-size: 16;
+    -fx-line-spacing: 4;
+    -fx-text-fill: rgba(234, 244, 250, 0.78);
+}
+
+.signal-card,
+.operator-chip,
+.phase-chip,
+.stat-card {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 8;
+    -fx-border-color: rgba(255, 255, 255, 0.12);
+    -fx-border-radius: 8;
+    -fx-padding: 16 18 16 18;
+}
+
+.signal-value {
+    -fx-font-size: 24;
+    -fx-font-weight: 900;
+    -fx-text-fill: #f5b84c;
+}
+
+.panel-title,
+.dashboard-title {
+    -fx-font-size: 34;
+    -fx-font-weight: 900;
+    -fx-text-fill: #ffffff;
+}
+
+.role-switcher {
+    -fx-background-color: rgba(4, 12, 18, 0.58);
+    -fx-background-radius: 8;
+    -fx-padding: 6;
+}
+
+.role-switcher .toggle-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 7;
+    -fx-border-width: 0;
+    -fx-cursor: hand;
+    -fx-font-size: 13;
+    -fx-font-weight: 800;
+    -fx-padding: 12 16 12 16;
+    -fx-text-fill: rgba(238, 247, 252, 0.70);
+}
+
+.role-switcher .toggle-button:selected {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #2acfbe, #3e8ed0);
+    -fx-text-fill: #041119;
+    -fx-effect: dropshadow(gaussian, rgba(42, 207, 190, 0.34), 16, 0.24, 0, 0);
+}
+
+.modern-input {
+    -fx-background-color: rgba(255, 255, 255, 0.10);
+    -fx-background-radius: 8;
+    -fx-border-color: rgba(255, 255, 255, 0.13);
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-font-size: 15;
+    -fx-padding: 14 15 14 15;
+    -fx-prompt-text-fill: rgba(232, 242, 248, 0.46);
+    -fx-text-fill: #ffffff;
+}
+
+.modern-input:focused {
+    -fx-border-color: #2acfbe;
+    -fx-effect: dropshadow(gaussian, rgba(42, 207, 190, 0.30), 18, 0.12, 0, 0);
+}
+
+.modern-combo {
+    -fx-background-color: rgba(255, 255, 255, 0.10);
+    -fx-background-radius: 8;
+    -fx-border-color: rgba(255, 255, 255, 0.13);
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+}
+
+.modern-combo .text-field {
+    -fx-background-color: transparent;
+    -fx-font-size: 15;
+    -fx-padding: 14 15 14 15;
+    -fx-prompt-text-fill: rgba(232, 242, 248, 0.46);
+    -fx-text-fill: #ffffff;
+}
+
+.modern-combo .arrow-button {
+    -fx-background-color: rgba(42, 207, 190, 0.18);
+    -fx-background-radius: 0 8 8 0;
+}
+
+.modern-combo .arrow {
+    -fx-background-color: #f6fbff;
+}
+
+.modern-combo .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #f6fbff;
+}
+
+.modern-combo .combo-box-popup .list-view {
+    -fx-background-color: #10202d;
+    -fx-border-color: rgba(42, 207, 190, 0.36);
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+
+.modern-combo .combo-box-popup .list-cell:hover {
+    -fx-background-color: rgba(42, 207, 190, 0.18);
+}
+
+.primary-button,
+.ghost-button,
+.sidebar-button,
+.danger-button,
+.action-card {
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-cursor: hand;
+    -fx-font-weight: 800;
+}
+
+.primary-button {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #2acfbe, #f5b84c);
+    -fx-text-fill: #071018;
+    -fx-font-size: 15;
+    -fx-padding: 14 18 14 18;
+    -fx-effect: dropshadow(gaussian, rgba(245, 184, 76, 0.30), 18, 0.18, 0, 8);
+}
+
+.primary-button:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #65eadb, #ffd16c);
+}
+
+.ghost-button,
+.sidebar-button {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-border-color: rgba(255, 255, 255, 0.14);
+    -fx-text-fill: rgba(245, 250, 253, 0.88);
+    -fx-font-size: 14;
+    -fx-padding: 12 14 12 14;
+}
+
+.ghost-button:hover,
+.sidebar-button:hover {
+    -fx-background-color: rgba(42, 207, 190, 0.18);
+    -fx-border-color: rgba(42, 207, 190, 0.48);
+}
+
+.danger-button {
+    -fx-background-color: rgba(242, 112, 89, 0.16);
+    -fx-border-color: rgba(242, 112, 89, 0.40);
+    -fx-text-fill: #ffd4cb;
+    -fx-font-size: 14;
+    -fx-padding: 12 14 12 14;
+}
+
+.danger-button:hover {
+    -fx-background-color: rgba(242, 112, 89, 0.26);
+    -fx-border-color: rgba(242, 112, 89, 0.70);
+}
+
+.module-toolbar {
+    -fx-background-color: rgba(255, 255, 255, 0.06);
+    -fx-background-radius: 8;
+    -fx-border-color: rgba(255, 255, 255, 0.10);
+    -fx-border-radius: 8;
+    -fx-padding: 12;
+}
+
+.summary-tile {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-background-radius: 8;
+    -fx-border-color: rgba(255, 255, 255, 0.12);
+    -fx-border-radius: 8;
+    -fx-padding: 12 16 12 16;
+    -fx-min-width: 160;
+}
+
+.bill-total {
+    -fx-font-size: 28;
+    -fx-font-weight: 900;
+    -fx-text-fill: #f5b84c;
+}
+
+.bill-count {
+    -fx-font-size: 20;
+    -fx-font-weight: 900;
+    -fx-text-fill: #2acfbe;
+}
+
+.status-line {
+    -fx-font-size: 13;
+    -fx-text-fill: rgba(232, 242, 248, 0.70);
+}
+
+.status-error {
+    -fx-text-fill: #ff9b8c;
+}
+
+.status-success {
+    -fx-text-fill: #9af0cd;
+}
+
+.sidebar {
+    -fx-background-color: rgba(3, 10, 16, 0.84);
+    -fx-border-color: rgba(255, 255, 255, 0.08);
+    -fx-border-width: 0 1 0 0;
+}
+
+.chip-value {
+    -fx-font-size: 16;
+    -fx-font-weight: 800;
+    -fx-text-fill: #ffffff;
+}
+
+.dashboard-scroll {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}
+
+.dashboard-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.dashboard-content {
+    -fx-background-color: transparent;
+}
+
+.hero-panel {
+    -fx-background-color:
+        linear-gradient(from 0% 0% to 100% 100%, rgba(42, 207, 190, 0.26), rgba(18, 36, 48, 0.86) 50%, rgba(242, 112, 89, 0.24) 100%);
+    -fx-background-radius: 8;
+    -fx-border-color: rgba(255, 255, 255, 0.13);
+    -fx-border-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.32), 28, 0.12, 0, 14);
+}
+
+.scan-line {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 0%, transparent, rgba(255, 255, 255, 0.20), transparent);
+}
+
+.hero-metric {
+    -fx-font-size: 44;
+    -fx-font-weight: 900;
+    -fx-text-fill: #ffffff;
+}
+
+.stat-card {
+    -fx-min-height: 100;
+}
+
+.stat-value {
+    -fx-font-size: 34;
+    -fx-font-weight: 900;
+    -fx-text-fill: #2acfbe;
+}
+
+.stat-value-small {
+    -fx-font-size: 22;
+    -fx-font-weight: 900;
+    -fx-text-fill: #f5b84c;
+}
+
+.section-title {
+    -fx-font-size: 15;
+    -fx-font-weight: 900;
+    -fx-text-fill: rgba(255, 255, 255, 0.86);
+}
+
+.action-card {
+    -fx-alignment: CENTER_LEFT;
+    -fx-background-color: rgba(255, 255, 255, 0.09);
+    -fx-border-color: rgba(255, 255, 255, 0.12);
+    -fx-font-size: 14;
+    -fx-line-spacing: 4;
+    -fx-padding: 18 18 18 18;
+    -fx-text-fill: #f8fbff;
+}
+
+.action-card:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, rgba(42, 207, 190, 0.24), rgba(245, 184, 76, 0.16));
+    -fx-border-color: rgba(42, 207, 190, 0.42);
+    -fx-effect: dropshadow(gaussian, rgba(42, 207, 190, 0.20), 18, 0.14, 0, 8);
+}
+
+.modern-table {
+    -fx-background-color: rgba(255, 255, 255, 0.07);
+    -fx-background-radius: 8;
+    -fx-border-color: rgba(255, 255, 255, 0.10);
+    -fx-border-radius: 8;
+    -fx-padding: 6;
+}
+
+.modern-table .column-header-background {
+    -fx-background-color: rgba(42, 207, 190, 0.16);
+    -fx-background-radius: 8 8 0 0;
+}
+
+.modern-table .column-header,
+.modern-table .filler {
+    -fx-background-color: transparent;
+    -fx-size: 42;
+}
+
+.modern-table .column-header .label {
+    -fx-font-size: 12;
+    -fx-font-weight: 900;
+    -fx-text-fill: rgba(245, 250, 253, 0.86);
+}
+
+.modern-table .table-row-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent rgba(255, 255, 255, 0.05) transparent;
+    -fx-padding: 8 0 8 0;
+}
+
+.modern-table .table-row-cell:odd {
+    -fx-background-color: rgba(255, 255, 255, 0.025);
+}
+
+.modern-table .table-cell {
+    -fx-border-color: transparent;
+    -fx-font-size: 13;
+    -fx-padding: 10 12 10 12;
+    -fx-text-fill: rgba(244, 250, 253, 0.86);
+}
+
+.module-header {
+    -fx-background-color:
+        linear-gradient(from 0% 0% to 100% 100%, rgba(42, 207, 190, 0.22), rgba(245, 184, 76, 0.12));
+    -fx-border-color: rgba(255, 255, 255, 0.08);
+    -fx-border-width: 0 0 1 0;
+}

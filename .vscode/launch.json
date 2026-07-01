@@ -1,0 +1,34 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "MainApp",
+      "request": "launch",
+      "mainClass": "main.java.com.model1.app.MainApp",
+      "projectName": "Model",
+      "preLaunchTask": "Build Model1",
+      "cwd": "${workspaceFolder}/Model1 (1)/Model",
+      "vmArgs": "--module-path \"C:/Users/User/Downloads/javafx-sdk-23.0.1/lib\" --add-modules javafx.controls,javafx.graphics,javafx.fxml --enable-native-access=javafx.graphics,org.xerial.sqlitejdbc"
+    },
+    {
+      "type": "java",
+      "name": "Launch Main (JavaFX)",
+      "request": "launch",
+      "mainClass": "main.Main",
+      "projectName": "Model",
+      "cwd": "${workspaceFolder}/Model1 (1)/Model",
+      "vmArgs": "--module-path \"C:/Users/User/Downloads/javafx-sdk-23.0.1/lib\" --add-modules javafx.controls,javafx.graphics,javafx.fxml --enable-native-access=javafx.graphics,org.xerial.sqlitejdbc"
+    },
+    {
+      "type": "java",
+      "name": "Launch MainApp (Phase 1)",
+      "request": "launch",
+      "mainClass": "main.java.com.model1.app.MainApp",
+      "projectName": "Model",
+      "preLaunchTask": "Build Model1",
+      "cwd": "${workspaceFolder}/Model1 (1)/Model",
+      "vmArgs": "--module-path \"C:/Users/User/Downloads/javafx-sdk-23.0.1/lib\" --add-modules javafx.controls,javafx.graphics,javafx.fxml --enable-native-access=javafx.graphics,org.xerial.sqlitejdbc"
+    }
+  ]
+}

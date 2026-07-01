@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:id="rootPane" styleClass="module-root" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.com.model1.controller.BillController">
+    <top>
+        <VBox spacing="12.0" styleClass="module-header">
+            <padding><Insets bottom="24.0" left="28.0" right="28.0" top="28.0" /></padding>
+            <children>
+                <HBox alignment="CENTER_LEFT" spacing="12.0">
+                    <children>
+                        <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label styleClass="panel-kicker" text="Cashier / Bill Editor" />
+                                <Label styleClass="dashboard-title" text="Bill Editor" />
+                                <Label styleClass="dashboard-subtitle" text="Search products, validate stock, and finish saved receipts from one checkout surface." />
+                            </children>
+                        </VBox>
+                        <Button onAction="#backToDashboard" styleClass="ghost-button" text="Dashboard" />
+                        <Button onAction="#signOut" styleClass="sidebar-button" text="Sign out" />
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </top>
+    <center>
+        <VBox spacing="16.0">
+            <padding><Insets bottom="28.0" left="28.0" right="28.0" top="28.0" /></padding>
+            <children>
+                <GridPane hgap="12.0" styleClass="module-toolbar" vgap="12.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="ALWAYS" minWidth="280.0" />
+                        <ColumnConstraints minWidth="118.0" />
+                        <ColumnConstraints minWidth="118.0" />
+                        <ColumnConstraints minWidth="110.0" />
+                        <ColumnConstraints minWidth="132.0" />
+                        <ColumnConstraints minWidth="116.0" />
+                        <ColumnConstraints minWidth="132.0" />
+                    </columnConstraints>
+                    <children>
+                        <ComboBox fx:id="productComboBox" maxWidth="Infinity" promptText="Search product" styleClass="modern-combo" GridPane.columnIndex="0" />
+                        <TextField fx:id="quantityField" promptText="Qty" styleClass="modern-input" GridPane.columnIndex="1" />
+                        <TextField fx:id="sectorField" promptText="Sector" styleClass="modern-input" GridPane.columnIndex="2" />
+                        <Button maxWidth="Infinity" onAction="#addBillItem" styleClass="primary-button" text="Add" GridPane.columnIndex="3" />
+                        <Button maxWidth="Infinity" onAction="#removeSelectedItem" styleClass="ghost-button" text="Remove" GridPane.columnIndex="4" />
+                        <Button maxWidth="Infinity" onAction="#clearBill" styleClass="ghost-button" text="Clear" GridPane.columnIndex="5" />
+                        <Button maxWidth="Infinity" onAction="#finishBill" styleClass="primary-button" text="Finish" GridPane.columnIndex="6" />
+                    </children>
+                </GridPane>
+                <HBox alignment="CENTER_LEFT" spacing="12.0">
+                    <children>
+                        <VBox spacing="3.0" styleClass="summary-tile">
+                            <children>
+                                <Label styleClass="stat-label" text="RUNNING TOTAL" />
+                                <Label fx:id="runningTotalLabel" styleClass="bill-total" text="\$0.00" />
+                            </children>
+                        </VBox>
+                        <VBox spacing="3.0" styleClass="summary-tile">
+                            <children>
+                                <Label styleClass="stat-label" text="CURRENT ITEMS" />
+                                <Label fx:id="itemCountLabel" styleClass="bill-count" text="0 items" />
+                            </children>
+                        </VBox>
+                        <Label fx:id="statusLabel" minHeight="28.0" styleClass="status-line" wrapText="true" HBox.hgrow="ALWAYS" />
+                    </children>
+                </HBox>
+                <TableView fx:id="billTable" prefHeight="440.0" styleClass="modern-table" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="productColumn" prefWidth="360.0" text="Product" />
+                        <TableColumn fx:id="quantityColumn" prefWidth="120.0" text="Qty" />
+                        <TableColumn fx:id="unitPriceColumn" prefWidth="160.0" text="Unit price" />
+                        <TableColumn fx:id="lineTotalColumn" prefWidth="180.0" text="Line total" />
+                        <TableColumn fx:id="sectorColumn" prefWidth="120.0" text="Sector" />
+                    </columns>
+                </TableView>
+            </children>
+        </VBox>
+    </center>
+</BorderPane>
