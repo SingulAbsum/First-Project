@@ -1,16 +1,13 @@
 ReadMe
 
 Cashier:
-username:kister   password:kister123
-username:aleks    password:aleks123
+username:cashier1   password:cashier1
 
 Manager:
-username:aster     password:aster1234
-username:bister    password:bister1234
+username:manager1    password:manager1
 
 Administrator:
-username:dister    password:dister12345
-username:bister    password:bister12345
+username:admin1   password:admin1
 
 
 (Manager supports multi-sector functions or its available due to the fact that in the database in the manager table ,manager id is unique so it is possible to add another manager with the same credentials but different sector and it will be counted as separate but the name will still connect them making them accessible by querries;and thats not limited to only manager as the same logic can be applied to cashier or administrator)
