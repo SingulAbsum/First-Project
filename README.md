@@ -23,6 +23,10 @@ The project emphasizes:
 
 ---
 
+# Running the Project
+Make sure to position the directory in the terminal to "Model1(first Year edition) (3)\Model1 (1)\Model"and run 'mvn javafx:run'
+
+
 # Main Features
 
 ### Administrator
