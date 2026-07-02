@@ -40,8 +40,8 @@
                         </HBox>
                         <VBox spacing="16.0">
                             <children>
-                                <Label styleClass="hero-title" text="Retail ops with a sharper pulse." wrapText="true" />
-                                <Label styleClass="hero-copy" text="A modern JavaFX command surface for billing, stock, reports, and employee control." wrapText="true" />
+                                <Label styleClass="hero-title" text="Store operations, ready." wrapText="true" />
+                                <Label styleClass="hero-copy" text="Sign in to manage checkout, stock, reports, and team access from one focused workspace." wrapText="true" />
                             </children>
                         </VBox>
                         <HBox spacing="14.0" styleClass="signal-strip">
@@ -90,11 +90,11 @@
                         </HBox>
                         <VBox spacing="12.0">
                             <children>
-                                <TextField fx:id="usernameField" promptText="Username" styleClass="modern-input" />
+                                <TextField fx:id="usernameField" onAction="#focusPassword" promptText="Username" styleClass="modern-input" />
                                 <PasswordField fx:id="passwordField" onAction="#handleLogin" promptText="Password" styleClass="modern-input" />
                             </children>
                         </VBox>
-                        <Button fx:id="signInButton" maxWidth="1.7976931348623157E308" onAction="#handleLogin" styleClass="primary-button" text="Enter dashboard" />
+                        <Button fx:id="signInButton" defaultButton="true" maxWidth="1.7976931348623157E308" onAction="#handleLogin" styleClass="primary-button" text="Enter dashboard" />
                         <Label fx:id="statusLabel" minHeight="24.0" styleClass="status-line" wrapText="true" />
                     </children>
                 </VBox>

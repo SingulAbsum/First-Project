@@ -76,6 +76,11 @@ public class LoginController {
         }
     }
 
+    @FXML
+    private void focusPassword() {
+        passwordField.requestFocus();
+    }
+
     private Role selectedRole() {
         Toggle selectedToggle = roleGroup.getSelectedToggle();
         if (selectedToggle == null) {

@@ -112,6 +112,19 @@ public class InventoryService {
         });
     }
 
+    public Supplier addSupplierCategory(String supplierName, String supplierCategory) {
+        ValidationUtils.requireNonBlank(supplierName, "Supplier name");
+        ValidationUtils.requireNonBlank(supplierCategory, "Supplier category");
+
+        return DatabaseManager.inTransaction(connection -> {
+            int supplierId = supplierRepository.nextSupplierId(connection);
+            Supplier supplier = new Supplier(supplierId, supplierName, supplierCategory);
+            validateSupplier(supplier);
+            supplierRepository.save(connection, supplier);
+            return supplier;
+        });
+    }
+
     public void refillProduct(String productName, int quantity, int sector) {
         ValidationUtils.requireNonBlank(productName, "Product name");
         ValidationUtils.requirePositive(quantity, "Refill quantity");

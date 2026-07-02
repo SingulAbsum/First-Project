@@ -2,16 +2,16 @@ package main.java.com.model1.controller;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -28,14 +28,12 @@ import main.java.com.model1.service.ReceiptService;
 import main.java.com.model1.util.ValidationUtils;
 
 public class BillController {
-    private static final DateTimeFormatter RECEIPT_DATE = DateTimeFormatter.ofPattern("MMddyyyy");
-
     @FXML
     private ComboBox<String> productComboBox;
     @FXML
     private TextField quantityField;
     @FXML
-    private TextField sectorField;
+    private ComboBox<Integer> sectorComboBox;
     @FXML
     private TableView<BillLineRow> billTable;
     @FXML
@@ -54,6 +52,12 @@ public class BillController {
     private Label itemCountLabel;
     @FXML
     private Label statusLabel;
+    @FXML
+    private Button removeItemButton;
+    @FXML
+    private Button clearBillButton;
+    @FXML
+    private Button finishBillButton;
 
     private final BillingService billingService = new BillingService();
     private final InventoryService inventoryService = new InventoryService();
@@ -64,9 +68,12 @@ public class BillController {
     @FXML
     private void initialize() {
         configureProducts();
+        configureSectors();
         configureTable();
         billTable.setItems(rows);
         billTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        billTable.setPlaceholder(emptyState("No items added yet."));
+        configureActionStates();
         updateSummary();
         setStatus("Ready to build a bill.", false);
     }
@@ -82,14 +89,20 @@ public class BillController {
     }
 
     @FXML
+    private void focusSector() {
+        sectorComboBox.requestFocus();
+    }
+
+    @FXML
     private void addBillItem() {
         try {
             String productName = productName();
             int quantity = positiveInt(quantityField, "Quantity");
-            int sector = positiveInt(sectorField, "Sector");
+            int sector = selectedSector(sectorComboBox, "Sector");
             BillItem item = billingService.prepareItem(new BillItemRequest(productName, quantity, sector));
             rows.add(new BillLineRow(item));
             quantityField.clear();
+            quantityField.requestFocus();
             updateSummary();
             setStatus(item.productName() + " added to the bill.", false);
         } catch (RuntimeException ex) {
@@ -112,9 +125,7 @@ public class BillController {
     @FXML
     private void clearBill() {
         rows.clear();
-        productComboBox.getEditor().clear();
-        quantityField.clear();
-        sectorField.clear();
+        clearInputs();
         updateSummary();
         setStatus("Current bill cleared.", false);
     }
@@ -128,15 +139,23 @@ public class BillController {
             ValidationUtils.requireNotEmpty(items, "Bill items");
 
             String cashierName = AppContext.getInstance().getActiveUsername().orElse("modern-cashier");
-            String receiptFileName = "modern-" + System.currentTimeMillis() + "-" + RECEIPT_DATE.format(LocalDate.now()) + ".txt";
-            Bill bill = billingService.finishBill(cashierName, items, receiptFileName);
+            String receiptFileName = receiptService.createReceiptFileName();
+            String storedReceiptPath = receiptService.storedReceiptPath(receiptFileName);
+            Bill bill = billingService.finishBill(cashierName, items, storedReceiptPath);
             receiptService.writeReceipt(bill);
             rows.clear();
+            clearInputs();
             updateSummary();
             setStatus("Bill #" + bill.id() + " completed and receipt generated.", false);
         } catch (RuntimeException ex) {
             setStatus(ex.getMessage(), true);
         }
+    }
+
+    private void configureActionStates() {
+        removeItemButton.disableProperty().bind(billTable.getSelectionModel().selectedItemProperty().isNull());
+        clearBillButton.disableProperty().bind(Bindings.isEmpty(rows));
+        finishBillButton.disableProperty().bind(Bindings.isEmpty(rows));
     }
 
     private void configureProducts() {
@@ -148,6 +167,11 @@ public class BillController {
         productComboBox.setItems(productNames);
         productComboBox.setEditable(true);
         productComboBox.getEditor().textProperty().addListener((observable, previous, current) -> filterProducts(current));
+    }
+
+    private void configureSectors() {
+        sectorComboBox.setItems(FXCollections.observableArrayList(1, 2, 3));
+        sectorComboBox.getSelectionModel().selectFirst();
     }
 
     private void filterProducts(String query) {
@@ -175,6 +199,13 @@ public class BillController {
         sectorColumn.setCellValueFactory(data -> data.getValue().sectorProperty());
     }
 
+    private void clearInputs() {
+        productComboBox.getEditor().clear();
+        quantityField.clear();
+        sectorComboBox.getSelectionModel().selectFirst();
+        productComboBox.requestFocus();
+    }
+
     private String productName() {
         String value = productComboBox.getEditor().getText();
         ValidationUtils.requireNonBlank(value, "Product name");
@@ -191,6 +222,13 @@ public class BillController {
         } catch (NumberFormatException ex) {
             throw new IllegalArgumentException(name + " must be a whole number.", ex);
         }
+    }
+
+    private int selectedSector(ComboBox<Integer> comboBox, String name) {
+        Integer value = comboBox == null ? null : comboBox.getValue();
+        ValidationUtils.requireNonNull(value, name);
+        ValidationUtils.requirePositive(value, name);
+        return value;
     }
 
     private void updateSummary() {
@@ -220,6 +258,13 @@ public class BillController {
         return AppContext.getInstance()
                 .getSceneRouter()
                 .orElseThrow(() -> new IllegalStateException("SceneRouter has not been initialized."));
+    }
+
+    private Label emptyState(String message) {
+        Label label = new Label(message);
+        label.getStyleClass().add("empty-state");
+        label.setWrapText(true);
+        return label;
     }
 
     public final class BillLineRow {

@@ -24,7 +24,24 @@ The project emphasizes:
 ---
 
 # Running the Project
-Make sure to position the directory in the terminal to "Model1(first Year edition) (3)\Model1 (1)\Model"and run 'mvn javafx:run'
+
+Open a terminal in:
+
+```text
+Model1(first Year edition) (3)\Model1 (1)\Model
+```
+
+Then run:
+
+```powershell
+mvn javafx:run
+```
+
+To run the regression suite:
+
+```powershell
+mvn test
+```
 
 
 # Main Features

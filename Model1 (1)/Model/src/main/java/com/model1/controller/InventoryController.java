@@ -32,11 +32,15 @@ public class InventoryController {
     @FXML
     private TextField priceField;
     @FXML
-    private TextField sectorField;
+    private ComboBox<Integer> sectorComboBox;
     @FXML
     private ComboBox<SupplierOption> supplierComboBox;
     @FXML
+    private ComboBox<String> refillProductComboBox;
+    @FXML
     private TextField refillQuantityField;
+    @FXML
+    private ComboBox<Integer> refillSectorComboBox;
     @FXML
     private TextField newSupplierNameField;
     @FXML
@@ -61,12 +65,15 @@ public class InventoryController {
     private final InventoryService inventoryService = new InventoryService();
     private final ObservableList<ProductRow> products = FXCollections.observableArrayList();
     private final ObservableList<SupplierOption> suppliers = FXCollections.observableArrayList();
+    private final ObservableList<String> productNames = FXCollections.observableArrayList();
 
     @FXML
     private void initialize() {
         configureTable();
         productTable.setItems(products);
         supplierComboBox.setItems(suppliers);
+        refillProductComboBox.setItems(productNames);
+        configureSectorChoices();
         searchField.textProperty().addListener((observable, previous, current) -> refreshProducts());
         productTable.getSelectionModel().selectedItemProperty().addListener((observable, previous, selected) -> populateSelection(selected));
         refreshSuppliers();
@@ -98,7 +105,7 @@ public class InventoryController {
                     positiveInt(quantityField, "Product quantity"),
                     moneyValue(priceField, "Product price"),
                     supplier.supplier().id(),
-                    positiveInt(sectorField, "Sector"));
+                    selectedSector(sectorComboBox, "Sector"));
             inventoryService.addProduct(product);
             clearProductInputs();
             refreshProducts();
@@ -114,18 +121,15 @@ public class InventoryController {
         try {
             String supplierName = text(newSupplierNameField, "New supplier name");
             String supplierCategory = text(newSupplierCategoryField, "New supplier category");
-            String productName = text(productNameField, "Product name");
-            int quantity = positiveInt(quantityField, "Product quantity");
-            BigDecimal price = moneyValue(priceField, "Product price");
-            int sector = positiveInt(sectorField, "Sector");
-
-            inventoryService.addProductCategory(supplierName, supplierCategory, productName, quantity, price, sector);
-            clearProductInputs();
+            Supplier supplier = inventoryService.addSupplierCategory(supplierName, supplierCategory);
             newSupplierNameField.clear();
             newSupplierCategoryField.clear();
             refreshSuppliers();
-            refreshProducts();
-            setStatus(productName + " category added with supplier " + supplierName + ".", false);
+            suppliers.stream()
+                    .filter(option -> option.supplier().id() == supplier.id())
+                    .findFirst()
+                    .ifPresent(option -> supplierComboBox.getSelectionModel().select(option));
+            setStatus(supplier.name() + " / " + supplier.category() + " category is ready for product assignment.", false);
         } catch (RuntimeException ex) {
             logFailure("add category", ex);
             setStatus(ex.getMessage(), true);
@@ -135,8 +139,8 @@ public class InventoryController {
     @FXML
     private void refillProduct() {
         try {
-            String productName = text(productNameField, "Product name");
-            int sector = positiveInt(sectorField, "Sector");
+            String productName = refillProductName();
+            int sector = selectedSector(refillSectorComboBox, "Sector");
             int quantity = positiveInt(refillQuantityField, "Refill quantity");
             inventoryService.refillProduct(productName, quantity, sector);
             refillQuantityField.clear();
@@ -156,6 +160,7 @@ public class InventoryController {
         sectorColumn.setCellValueFactory(data -> data.getValue().sectorProperty());
         statusColumn.setCellValueFactory(data -> data.getValue().statusProperty());
         productTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        productTable.setPlaceholder(emptyState("No products match the current filter."));
     }
 
     private void refreshProducts() {
@@ -169,6 +174,11 @@ public class InventoryController {
                     .map(ProductRow::new)
                     .toList();
             products.setAll(rows);
+            productNames.setAll(rows.stream()
+                    .map(row -> row.product().name())
+                    .distinct()
+                    .sorted(String.CASE_INSENSITIVE_ORDER)
+                    .toList());
             setStatus(rows.size() + " products loaded.", false);
         } catch (RuntimeException ex) {
             logFailure("refresh products", ex);
@@ -198,7 +208,9 @@ public class InventoryController {
         productNameField.setText(product.name());
         quantityField.setText(String.valueOf(product.quantity()));
         priceField.setText(product.price().setScale(2, RoundingMode.HALF_UP).toPlainString());
-        sectorField.setText(String.valueOf(product.sector()));
+        sectorComboBox.setValue(product.sector());
+        refillProductComboBox.getEditor().setText(product.name());
+        refillSectorComboBox.setValue(product.sector());
         suppliers.stream()
                 .filter(option -> option.supplier().id() == product.supplierId())
                 .findFirst()
@@ -209,6 +221,13 @@ public class InventoryController {
         SupplierOption selected = supplierComboBox.getSelectionModel().getSelectedItem();
         ValidationUtils.requireNonNull(selected, "Supplier");
         return selected;
+    }
+
+    private void configureSectorChoices() {
+        sectorComboBox.setItems(FXCollections.observableArrayList(1, 2, 3));
+        refillSectorComboBox.setItems(FXCollections.observableArrayList(1, 2, 3));
+        sectorComboBox.getSelectionModel().selectFirst();
+        refillSectorComboBox.getSelectionModel().selectFirst();
     }
 
     private String text(TextField field, String name) {
@@ -226,6 +245,18 @@ public class InventoryController {
         }
     }
 
+    private int selectedSector(ComboBox<Integer> comboBox, String name) {
+        Integer value = comboBox == null ? null : comboBox.getValue();
+        ValidationUtils.requireNonNull(value, name);
+        ValidationUtils.requirePositive(value, name);
+        return value;
+    }
+
+    private String refillProductName() {
+        String value = refillProductComboBox.getEditor().getText();
+        return ValidationUtils.requireNonBlank(value, "Product name").trim();
+    }
+
     private BigDecimal moneyValue(TextField field, String name) {
         String value = text(field, name);
         try {
@@ -241,7 +272,7 @@ public class InventoryController {
         productNameField.clear();
         quantityField.clear();
         priceField.clear();
-        sectorField.clear();
+        sectorComboBox.getSelectionModel().selectFirst();
     }
 
     private String money(BigDecimal value) {
@@ -263,6 +294,13 @@ public class InventoryController {
         return AppContext.getInstance()
                 .getSceneRouter()
                 .orElseThrow(() -> new IllegalStateException("SceneRouter has not been initialized."));
+    }
+
+    private Label emptyState(String message) {
+        Label label = new Label(message);
+        label.getStyleClass().add("empty-state");
+        label.setWrapText(true);
+        return label;
     }
 
     public final class ProductRow {

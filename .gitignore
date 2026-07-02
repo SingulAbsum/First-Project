@@ -1,0 +1,15 @@
+# Build outputs
+target/
+bin/
+
+# Runtime data and generated artifacts
+receipts/
+*.log
+
+# IDE noise
+.classpath
+.project
+.settings/
+
+# Local backups
+phase0-backup-*.zip

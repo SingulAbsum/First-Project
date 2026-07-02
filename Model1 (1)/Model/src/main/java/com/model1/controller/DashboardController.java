@@ -86,6 +86,7 @@ public class DashboardController {
         detailColumn.setCellValueFactory(cell -> cell.getValue().detailProperty());
         statusColumn.setCellValueFactory(cell -> cell.getValue().statusProperty());
         previewTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        previewTable.setPlaceholder(emptyState("No workspace actions available."));
     }
 
     private void configureHeader(Role role) {
@@ -101,8 +102,8 @@ public class DashboardController {
                 heroCaption.setText("Create bills, review receipt history, and keep the checkout path focused.");
                 statMode.setText("Cashier");
                 previewTable.setItems(FXCollections.observableArrayList(
-                        new DashboardRow("Create bill", "Open the modern bill editor scene", "Modern route"),
-                        new DashboardRow("Bill history", "Open the modern bill history scene", "Modern route"),
+                        new DashboardRow("Create bill", "Start a cashier checkout", "Ready"),
+                        new DashboardRow("Bill history", "Review receipts and regenerate files", "Ready"),
                         new DashboardRow("Session", "Cashier login history remains tracked", "Connected")));
             }
             case MANAGER -> {
@@ -113,9 +114,9 @@ public class DashboardController {
                 heroCaption.setText("Product creation, refill flows, and low-stock notifications remain connected to the existing data.");
                 statMode.setText("Manager");
                 previewTable.setItems(FXCollections.observableArrayList(
-                        new DashboardRow("Inventory", "Open the modern inventory scene", "Modern route"),
-                        new DashboardRow("Notifications", "Open the modern notification scene", "Modern route"),
-                        new DashboardRow("Reports", "Open the modern report scene", "Modern route")));
+                        new DashboardRow("Inventory", "Add, refill, and inspect products", "Ready"),
+                        new DashboardRow("Notifications", "Resolve low-stock signals", "Ready"),
+                        new DashboardRow("Reports", "Generate sales and cashier reports", "Ready")));
             }
             case ADMINISTRATOR -> {
                 dashboardTitle.setText("Operations Cortex");
@@ -125,9 +126,9 @@ public class DashboardController {
                 heroCaption.setText("Employee management and finance reports are staged behind a modern dashboard shell.");
                 statMode.setText("Administrator");
                 previewTable.setItems(FXCollections.observableArrayList(
-                        new DashboardRow("Employees", "Open the modern employee management scene", "Modern route"),
-                        new DashboardRow("Access", "Role-scoped permissions stay intact", "Ready"),
-                        new DashboardRow("Finance", "Open the modern financial report scene", "Modern route")));
+                        new DashboardRow("Employees", "Create, edit, and delete staff", "Ready"),
+                        new DashboardRow("Access", "Role-scoped permissions stay intact", "Connected"),
+                        new DashboardRow("Finance", "Generate revenue and expense reports", "Ready")));
             }
         }
     }
@@ -157,10 +158,6 @@ public class DashboardController {
     }
 
     private void configurePreviewRoutes(Role role) {
-        if (role != Role.CASHIER) {
-            return;
-        }
-
         previewTable.setOnMouseClicked(event -> {
             if (event.getClickCount() < 2) {
                 return;
@@ -170,10 +167,30 @@ public class DashboardController {
                 return;
             }
             String selectedItem = selected.itemProperty().get();
-            if ("Create bill".equals(selectedItem)) {
-                openRoute("bill editor", () -> router().openCashierBillEditor());
-            } else if ("Bill history".equals(selectedItem)) {
-                openRoute("bill history", () -> router().openCashierBillHistory());
+            switch (role) {
+                case CASHIER -> {
+                    if ("Create bill".equals(selectedItem)) {
+                        openRoute("bill editor", () -> router().openCashierBillEditor());
+                    } else if ("Bill history".equals(selectedItem)) {
+                        openRoute("bill history", () -> router().openCashierBillHistory());
+                    }
+                }
+                case MANAGER -> {
+                    if ("Inventory".equals(selectedItem)) {
+                        openRoute("inventory", () -> router().openManagerAddProduct());
+                    } else if ("Notifications".equals(selectedItem)) {
+                        openRoute("notifications", () -> router().openManagerNotifications());
+                    } else if ("Reports".equals(selectedItem)) {
+                        openRoute("reports", () -> router().openManagerReports());
+                    }
+                }
+                case ADMINISTRATOR -> {
+                    if ("Employees".equals(selectedItem)) {
+                        openRoute("employees", () -> router().openAdminAddEmployee());
+                    } else if ("Finance".equals(selectedItem)) {
+                        openRoute("financial reports", () -> router().openAdminFinancialReports());
+                    }
+                }
             }
         });
     }
@@ -191,8 +208,16 @@ public class DashboardController {
         Button button = new Button(title + "\n" + caption);
         button.getStyleClass().add("action-card");
         button.setMaxWidth(Double.MAX_VALUE);
+        button.setWrapText(true);
         button.setOnAction(event -> action.run());
         return button;
+    }
+
+    private Label emptyState(String message) {
+        Label label = new Label(message);
+        label.getStyleClass().add("empty-state");
+        label.setWrapText(true);
+        return label;
     }
 
     private void loadOperationalSnapshot(Role role) {

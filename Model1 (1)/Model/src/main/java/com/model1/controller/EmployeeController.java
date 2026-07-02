@@ -10,7 +10,9 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
@@ -37,7 +39,7 @@ public class EmployeeController {
     @FXML
     private TextField nameField;
     @FXML
-    private TextField birthDateField;
+    private DatePicker birthDatePicker;
     @FXML
     private TextField phoneField;
     @FXML
@@ -49,7 +51,7 @@ public class EmployeeController {
     @FXML
     private PasswordField passwordField;
     @FXML
-    private TextField sectorField;
+    private ComboBox<Integer> sectorComboBox;
     @FXML
     private TableView<EmployeeRow> employeeTable;
     @FXML
@@ -68,6 +70,10 @@ public class EmployeeController {
     private TableColumn<EmployeeRow, String> sectorColumn;
     @FXML
     private Label statusLabel;
+    @FXML
+    private Button editEmployeeButton;
+    @FXML
+    private Button deleteEmployeeButton;
 
     private final EmployeeService employeeService = new EmployeeService();
     private final ObservableList<EmployeeRow> rows = FXCollections.observableArrayList();
@@ -78,6 +84,7 @@ public class EmployeeController {
         configureCombos();
         configureTable();
         employeeTable.setItems(rows);
+        configureActionStates();
         searchField.textProperty().addListener((observable, previous, current) -> refreshData());
         roleFilterComboBox.valueProperty().addListener((observable, previous, current) -> refreshData());
         roleComboBox.valueProperty().addListener((observable, previous, current) -> syncAccessLevel());
@@ -121,14 +128,14 @@ public class EmployeeController {
             Employee employee = employeeService.createEmployee(
                     role,
                     text(nameField, "Employee name"),
-                    date(birthDateField, "Birth date"),
+                    date(birthDatePicker, "Birth date"),
                     text(phoneField, "Phone number"),
                     text(emailField, "Email"),
                     moneyValue(salaryField, "Salary"),
                     selectedAccessLevel(),
                     text(usernameField, "Username"),
                     text(passwordField, "Password"),
-                    positiveInt(sectorField, "Sector"));
+                    selectedSector(sectorComboBox, "Sector"));
             roleFilterComboBox.setValue(employee.getRole());
             clearForm();
             refreshData();
@@ -151,14 +158,14 @@ public class EmployeeController {
                     role,
                     selectedEmployee.getId(),
                     text(nameField, "Employee name"),
-                    date(birthDateField, "Birth date"),
+                    date(birthDatePicker, "Birth date"),
                     text(phoneField, "Phone number"),
                     text(emailField, "Email"),
                     moneyValue(salaryField, "Salary"),
                     selectedAccessLevel(),
                     text(usernameField, "Username"),
                     text(passwordField, "Password"),
-                    positiveInt(sectorField, "Sector"));
+                    selectedSector(sectorComboBox, "Sector"));
             employeeService.update(employee);
             clearForm();
             refreshData();
@@ -191,22 +198,24 @@ public class EmployeeController {
         roleComboBox.setValue(roleFilterComboBox.getValue());
         syncAccessLevel();
         nameField.clear();
-        birthDateField.clear();
+        birthDatePicker.setValue(null);
         phoneField.clear();
         emailField.clear();
         salaryField.clear();
         usernameField.clear();
         passwordField.clear();
-        sectorField.clear();
+        sectorComboBox.getSelectionModel().selectFirst();
     }
 
     private void configureCombos() {
         roleFilterComboBox.setItems(FXCollections.observableArrayList(Role.values()));
         roleComboBox.setItems(FXCollections.observableArrayList(Role.values()));
         accessComboBox.setItems(FXCollections.observableArrayList(AccessLevel.values()));
+        sectorComboBox.setItems(FXCollections.observableArrayList(1, 2, 3));
         roleFilterComboBox.setValue(Role.CASHIER);
         roleComboBox.setValue(Role.CASHIER);
         accessComboBox.setValue(AccessLevel.CASHIER);
+        sectorComboBox.getSelectionModel().selectFirst();
     }
 
     private void configureTable() {
@@ -218,6 +227,12 @@ public class EmployeeController {
         accessColumn.setCellValueFactory(data -> data.getValue().accessProperty());
         sectorColumn.setCellValueFactory(data -> data.getValue().sectorProperty());
         employeeTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        employeeTable.setPlaceholder(emptyState("No employees match this role and filter."));
+    }
+
+    private void configureActionStates() {
+        editEmployeeButton.disableProperty().bind(employeeTable.getSelectionModel().selectedItemProperty().isNull());
+        deleteEmployeeButton.disableProperty().bind(employeeTable.getSelectionModel().selectedItemProperty().isNull());
     }
 
     private void populateSelection(EmployeeRow selected) {
@@ -228,13 +243,13 @@ public class EmployeeController {
         roleComboBox.setValue(selectedEmployee.getRole());
         accessComboBox.setValue(selectedEmployee.getAccessLevel());
         nameField.setText(selectedEmployee.getName());
-        birthDateField.setText(selectedEmployee.getBirthDate().toString());
+        birthDatePicker.setValue(selectedEmployee.getBirthDate());
         phoneField.setText(selectedEmployee.getPhoneNumber());
         emailField.setText(selectedEmployee.getEmail());
         salaryField.setText(selectedEmployee.getSalary().setScale(2, RoundingMode.HALF_UP).toPlainString());
         usernameField.setText(selectedEmployee.getUsername());
         passwordField.setText(selectedEmployee.getPassword());
-        sectorField.setText(String.valueOf(selectedEmployee.getSector()));
+        sectorComboBox.setValue(selectedEmployee.getSector());
     }
 
     private void syncAccessLevel() {
@@ -256,8 +271,12 @@ public class EmployeeController {
         return ValidationUtils.requireNonBlank(field == null ? "" : field.getText(), name);
     }
 
-    private LocalDate date(TextField field, String name) {
-        return DateParser.parseIsoOrLegacy(text(field, name), name);
+    private LocalDate date(DatePicker picker, String name) {
+        if (picker != null && picker.getValue() != null) {
+            return picker.getValue();
+        }
+        String typedValue = picker == null ? "" : picker.getEditor().getText();
+        return DateParser.parseIsoOrLegacy(typedValue, name);
     }
 
     private int positiveInt(TextField field, String name) {
@@ -269,6 +288,13 @@ public class EmployeeController {
         } catch (NumberFormatException ex) {
             throw new IllegalArgumentException(name + " must be a whole number.", ex);
         }
+    }
+
+    private int selectedSector(ComboBox<Integer> comboBox, String name) {
+        Integer value = comboBox == null ? null : comboBox.getValue();
+        ValidationUtils.requireNonNull(value, name);
+        ValidationUtils.requirePositive(value, name);
+        return value;
     }
 
     private BigDecimal moneyValue(TextField field, String name) {
@@ -309,6 +335,13 @@ public class EmployeeController {
         return AppContext.getInstance()
                 .getSceneRouter()
                 .orElseThrow(() -> new IllegalStateException("SceneRouter has not been initialized."));
+    }
+
+    private Label emptyState(String message) {
+        Label label = new Label(message);
+        label.getStyleClass().add("empty-state");
+        label.setWrapText(true);
+        return label;
     }
 
     public final class EmployeeRow {

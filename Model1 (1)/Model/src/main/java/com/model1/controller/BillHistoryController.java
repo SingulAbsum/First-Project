@@ -10,20 +10,22 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import main.java.com.model1.app.AppContext;
 import main.java.com.model1.app.SceneRouter;
 import main.java.com.model1.model.entity.Bill;
 import main.java.com.model1.model.entity.BillItem;
 import main.java.com.model1.service.BillHistoryService;
+import main.java.com.model1.service.ReceiptService;
 import main.java.com.model1.util.DateParser;
 
 public class BillHistoryController {
     @FXML
-    private TextField dateField;
+    private DatePicker datePicker;
     @FXML
     private TableView<BillHistoryRow> billTable;
     @FXML
@@ -52,8 +54,13 @@ public class BillHistoryController {
     private TableColumn<BillItemRow, String> sectorColumn;
     @FXML
     private Label statusLabel;
+    @FXML
+    private Button openReceiptButton;
+    @FXML
+    private Button regenerateReceiptButton;
 
     private final BillHistoryService billHistoryService = new BillHistoryService();
+    private final ReceiptService receiptService = new ReceiptService();
     private final ObservableList<BillHistoryRow> bills = FXCollections.observableArrayList();
     private final ObservableList<BillItemRow> items = FXCollections.observableArrayList();
 
@@ -63,6 +70,7 @@ public class BillHistoryController {
         configureItemTable();
         billTable.setItems(bills);
         itemTable.setItems(items);
+        configureActionStates();
         billTable.getSelectionModel().selectedItemProperty().addListener((observable, previous, selected) -> showItems(selected));
         loadAllHistory();
     }
@@ -89,9 +97,33 @@ public class BillHistoryController {
     @FXML
     private void loadHistoryForDate() {
         try {
-            LocalDate date = DateParser.parseIsoOrLegacy(dateField.getText(), "History date");
+            LocalDate date = selectedDate(datePicker, "History date");
             renderBills(billHistoryService.findBillsByDate(date), "Bills loaded for " + date + ".");
         } catch (RuntimeException ex) {
+            setStatus(ex.getMessage(), true);
+        }
+    }
+
+    @FXML
+    private void openReceipt() {
+        try {
+            Bill bill = selectedBill();
+            receiptService.openReceipt(bill);
+            setStatus("Opened receipt for bill #" + bill.id() + ".", false);
+        } catch (RuntimeException ex) {
+            logFailure("open receipt", ex);
+            setStatus(ex.getMessage(), true);
+        }
+    }
+
+    @FXML
+    private void regenerateReceipt() {
+        try {
+            Bill bill = selectedBill();
+            receiptService.regenerateReceipt(bill);
+            setStatus("Regenerated receipt for bill #" + bill.id() + " from saved bill items.", false);
+        } catch (RuntimeException ex) {
+            logFailure("regenerate receipt", ex);
             setStatus(ex.getMessage(), true);
         }
     }
@@ -104,6 +136,7 @@ public class BillHistoryController {
         totalColumn.setCellValueFactory(data -> data.getValue().totalProperty());
         receiptColumn.setCellValueFactory(data -> data.getValue().receiptProperty());
         billTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        billTable.setPlaceholder(emptyState("No bills found for this selection."));
     }
 
     private void configureItemTable() {
@@ -113,6 +146,20 @@ public class BillHistoryController {
         lineTotalColumn.setCellValueFactory(data -> data.getValue().lineTotalProperty());
         sectorColumn.setCellValueFactory(data -> data.getValue().sectorProperty());
         itemTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        itemTable.setPlaceholder(emptyState("Select a bill to inspect saved items."));
+    }
+
+    private void configureActionStates() {
+        openReceiptButton.disableProperty().bind(billTable.getSelectionModel().selectedItemProperty().isNull());
+        regenerateReceiptButton.disableProperty().bind(billTable.getSelectionModel().selectedItemProperty().isNull());
+    }
+
+    private LocalDate selectedDate(DatePicker picker, String fieldName) {
+        if (picker != null && picker.getValue() != null) {
+            return picker.getValue();
+        }
+        String typedValue = picker == null ? "" : picker.getEditor().getText();
+        return DateParser.parseIsoOrLegacy(typedValue, fieldName);
     }
 
     private void renderBills(List<Bill> loadedBills, String message) {
@@ -135,10 +182,23 @@ public class BillHistoryController {
         }
     }
 
+    private Bill selectedBill() {
+        BillHistoryRow selected = billTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            throw new IllegalArgumentException("Select a bill first.");
+        }
+        return selected.bill();
+    }
+
     private void setStatus(String message, boolean error) {
         statusLabel.setText(message == null ? "" : message);
         statusLabel.getStyleClass().removeAll("status-error", "status-success");
         statusLabel.getStyleClass().add(error ? "status-error" : "status-success");
+    }
+
+    private void logFailure(String action, Throwable throwable) {
+        System.err.println("[Model1] Receipt action failed: " + action);
+        throwable.printStackTrace(System.err);
     }
 
     private String money(BigDecimal value) {
@@ -149,6 +209,13 @@ public class BillHistoryController {
         return AppContext.getInstance()
                 .getSceneRouter()
                 .orElseThrow(() -> new IllegalStateException("SceneRouter has not been initialized."));
+    }
+
+    private Label emptyState(String message) {
+        Label label = new Label(message);
+        label.getStyleClass().add("empty-state");
+        label.setWrapText(true);
+        return label;
     }
 
     public final class BillHistoryRow {

@@ -9,16 +9,19 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import main.java.com.model1.app.AppContext;
 import main.java.com.model1.app.SceneRouter;
 import main.java.com.model1.model.dto.CashierReport;
 import main.java.com.model1.model.dto.FinancialReport;
 import main.java.com.model1.model.dto.SalesReport;
+import main.java.com.model1.model.enums.Role;
+import main.java.com.model1.service.EmployeeService;
 import main.java.com.model1.service.ReportService;
 import main.java.com.model1.util.DateParser;
 import main.java.com.model1.util.ValidationUtils;
@@ -27,11 +30,11 @@ public class ReportController {
     @FXML
     private BorderPane rootPane;
     @FXML
-    private TextField cashierField;
+    private ComboBox<String> cashierComboBox;
     @FXML
-    private TextField startDateField;
+    private DatePicker startDatePicker;
     @FXML
-    private TextField endDateField;
+    private DatePicker endDatePicker;
     @FXML
     private Label reportTypeLabel;
     @FXML
@@ -52,6 +55,7 @@ public class ReportController {
     private Label statusLabel;
 
     private final ReportService reportService = new ReportService();
+    private final EmployeeService employeeService = new EmployeeService();
     private final ObservableList<ReportRow> rows = FXCollections.observableArrayList();
     private ReportRoute route = ReportRoute.MANAGER_REPORTS;
 
@@ -62,12 +66,9 @@ public class ReportController {
             route = ReportRoute.valueOf(value.toString());
         }
         configureTable();
+        configureCashiers();
         setDefaultDates();
         reportTypeLabel.setText(route.displayName);
-        if (route == ReportRoute.ADMIN_FINANCIAL_REPORTS && cashierField != null) {
-            cashierField.setDisable(true);
-            cashierField.setPromptText("Not used for financial reports");
-        }
         renderEmptyState();
     }
 
@@ -102,7 +103,7 @@ public class ReportController {
     @FXML
     private void generateCashierReport() {
         try {
-            String cashierName = ValidationUtils.requireNonBlank(cashierField.getText(), "Cashier name");
+            String cashierName = selectedCashierName();
             CashierReport report = reportService.cashierReport(cashierName, startDate(), endDate());
             rows.setAll(
                     new ReportRow("Bills generated", String.valueOf(report.totalBills()), report.cashierName()),
@@ -140,20 +141,47 @@ public class ReportController {
         contextColumn.setCellValueFactory(data -> data.getValue().contextProperty());
         reportTable.setItems(rows);
         reportTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        reportTable.setPlaceholder(emptyState("Generate a report to see metrics."));
+    }
+
+    private void configureCashiers() {
+        if (cashierComboBox == null) {
+            return;
+        }
+        try {
+            cashierComboBox.setItems(FXCollections.observableArrayList(employeeService.findByRole(Role.CASHIER).stream()
+                    .map(employee -> employee.getName())
+                    .toList()));
+        } catch (RuntimeException ex) {
+            cashierComboBox.setItems(FXCollections.observableArrayList());
+        }
     }
 
     private void setDefaultDates() {
         LocalDate today = LocalDate.now();
-        startDateField.setText(today.withDayOfMonth(1).toString());
-        endDateField.setText(today.toString());
+        startDatePicker.setValue(today.withDayOfMonth(1));
+        endDatePicker.setValue(today);
     }
 
     private LocalDate startDate() {
-        return DateParser.parseIsoOrLegacy(startDateField.getText(), "Start date");
+        return selectedDate(startDatePicker, "Start date");
     }
 
     private LocalDate endDate() {
-        return DateParser.parseIsoOrLegacy(endDateField.getText(), "End date");
+        return selectedDate(endDatePicker, "End date");
+    }
+
+    private String selectedCashierName() {
+        String value = cashierComboBox == null ? "" : cashierComboBox.getEditor().getText();
+        return ValidationUtils.requireNonBlank(value, "Cashier name");
+    }
+
+    private LocalDate selectedDate(DatePicker picker, String fieldName) {
+        if (picker != null && picker.getValue() != null) {
+            return picker.getValue();
+        }
+        String typedValue = picker == null ? "" : picker.getEditor().getText();
+        return DateParser.parseIsoOrLegacy(typedValue, fieldName);
     }
 
     private void renderEmptyState() {
@@ -192,6 +220,13 @@ public class ReportController {
         return AppContext.getInstance()
                 .getSceneRouter()
                 .orElseThrow(() -> new IllegalStateException("SceneRouter has not been initialized."));
+    }
+
+    private Label emptyState(String message) {
+        Label label = new Label(message);
+        label.getStyleClass().add("empty-state");
+        label.setWrapText(true);
+        return label;
     }
 
     public static final class ReportRow {

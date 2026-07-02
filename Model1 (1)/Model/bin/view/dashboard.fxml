@@ -44,8 +44,8 @@
                 <Region VBox.vgrow="ALWAYS" />
                 <VBox spacing="8.0" styleClass="phase-chip">
                     <children>
-                        <Label styleClass="chip-label" text="Migration phase" />
-                        <Label styleClass="chip-value" text="Phase 8 UI shell" />
+                        <Label styleClass="chip-label" text="Workspace" />
+                        <Label styleClass="chip-value" text="Modernized" />
                     </children>
                 </VBox>
             </children>

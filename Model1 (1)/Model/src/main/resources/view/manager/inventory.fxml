@@ -51,25 +51,46 @@
                         <ColumnConstraints minWidth="130.0" />
                         <ColumnConstraints minWidth="110.0" />
                         <ColumnConstraints hgrow="ALWAYS" minWidth="240.0" />
+                        <ColumnConstraints minWidth="128.0" />
                     </columnConstraints>
                     <children>
+                        <Label styleClass="section-title" text="Add product" GridPane.columnIndex="0" GridPane.columnSpan="6" />
                         <TextField fx:id="productNameField" promptText="Product name" styleClass="modern-input" GridPane.columnIndex="0" />
                         <TextField fx:id="quantityField" promptText="Qty" styleClass="modern-input" GridPane.columnIndex="1" />
                         <TextField fx:id="priceField" promptText="Price" styleClass="modern-input" GridPane.columnIndex="2" />
-                        <TextField fx:id="sectorField" promptText="Sector" styleClass="modern-input" GridPane.columnIndex="3" />
+                        <ComboBox fx:id="sectorComboBox" maxWidth="Infinity" promptText="Sector" styleClass="modern-combo" GridPane.columnIndex="3" />
                         <ComboBox fx:id="supplierComboBox" maxWidth="Infinity" promptText="Supplier" styleClass="modern-combo" GridPane.columnIndex="4" />
-                        <TextField fx:id="refillQuantityField" promptText="Refill qty" styleClass="modern-input" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                        <TextField fx:id="newSupplierNameField" promptText="New supplier name" styleClass="modern-input" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
-                        <TextField fx:id="newSupplierCategoryField" promptText="New category" styleClass="modern-input" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+                        <Button onAction="#addProduct" styleClass="primary-button" text="Add product" GridPane.columnIndex="5" />
                     </children>
                 </GridPane>
-                <HBox spacing="12.0">
+                <GridPane hgap="12.0" styleClass="module-toolbar" vgap="12.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="ALWAYS" minWidth="250.0" />
+                        <ColumnConstraints minWidth="140.0" />
+                        <ColumnConstraints minWidth="120.0" />
+                        <ColumnConstraints minWidth="150.0" />
+                    </columnConstraints>
                     <children>
-                        <Button onAction="#addProduct" styleClass="primary-button" text="Add product" />
-                        <Button onAction="#addCategory" styleClass="ghost-button" text="Add supplier category" />
-                        <Button onAction="#refillProduct" styleClass="ghost-button" text="Refill selected" />
+                        <Label styleClass="section-title" text="Refill stock" GridPane.columnIndex="0" GridPane.columnSpan="4" />
+                        <ComboBox fx:id="refillProductComboBox" editable="true" maxWidth="Infinity" promptText="Product to refill" styleClass="modern-combo" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                        <TextField fx:id="refillQuantityField" promptText="Refill qty" styleClass="modern-input" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <ComboBox fx:id="refillSectorComboBox" maxWidth="Infinity" promptText="Sector" styleClass="modern-combo" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <Button onAction="#refillProduct" styleClass="ghost-button" text="Refill selected" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                     </children>
-                </HBox>
+                </GridPane>
+                <GridPane hgap="12.0" styleClass="module-toolbar" vgap="12.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="ALWAYS" minWidth="260.0" />
+                        <ColumnConstraints hgrow="ALWAYS" minWidth="220.0" />
+                        <ColumnConstraints minWidth="190.0" />
+                    </columnConstraints>
+                    <children>
+                        <Label styleClass="section-title" text="Add supplier category" GridPane.columnIndex="0" GridPane.columnSpan="3" />
+                        <TextField fx:id="newSupplierNameField" promptText="Supplier name" styleClass="modern-input" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                        <TextField fx:id="newSupplierCategoryField" promptText="Category" styleClass="modern-input" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Button onAction="#addCategory" styleClass="primary-button" text="Add category" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                    </children>
+                </GridPane>
                 <TableView fx:id="productTable" prefHeight="430.0" styleClass="modern-table" VBox.vgrow="ALWAYS">
                     <columns>
                         <TableColumn fx:id="productColumn" prefWidth="300.0" text="Product" />

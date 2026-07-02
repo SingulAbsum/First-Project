@@ -51,12 +51,12 @@
                     </columnConstraints>
                     <children>
                         <ComboBox fx:id="productComboBox" maxWidth="Infinity" promptText="Search product" styleClass="modern-combo" GridPane.columnIndex="0" />
-                        <TextField fx:id="quantityField" promptText="Qty" styleClass="modern-input" GridPane.columnIndex="1" />
-                        <TextField fx:id="sectorField" promptText="Sector" styleClass="modern-input" GridPane.columnIndex="2" />
-                        <Button maxWidth="Infinity" onAction="#addBillItem" styleClass="primary-button" text="Add" GridPane.columnIndex="3" />
-                        <Button maxWidth="Infinity" onAction="#removeSelectedItem" styleClass="ghost-button" text="Remove" GridPane.columnIndex="4" />
-                        <Button maxWidth="Infinity" onAction="#clearBill" styleClass="ghost-button" text="Clear" GridPane.columnIndex="5" />
-                        <Button maxWidth="Infinity" onAction="#finishBill" styleClass="primary-button" text="Finish" GridPane.columnIndex="6" />
+                        <TextField fx:id="quantityField" onAction="#focusSector" promptText="Qty" styleClass="modern-input" GridPane.columnIndex="1" />
+                        <ComboBox fx:id="sectorComboBox" maxWidth="Infinity" promptText="Sector" styleClass="modern-combo" GridPane.columnIndex="2" />
+                        <Button maxWidth="Infinity" onAction="#addBillItem" styleClass="primary-button" text="Add item" GridPane.columnIndex="3" />
+                        <Button fx:id="removeItemButton" maxWidth="Infinity" onAction="#removeSelectedItem" styleClass="ghost-button" text="Remove line" GridPane.columnIndex="4" />
+                        <Button fx:id="clearBillButton" maxWidth="Infinity" onAction="#clearBill" styleClass="ghost-button" text="Clear" GridPane.columnIndex="5" />
+                        <Button fx:id="finishBillButton" maxWidth="Infinity" onAction="#finishBill" styleClass="primary-button" text="Finish bill" GridPane.columnIndex="6" />
                     </children>
                 </GridPane>
                 <HBox alignment="CENTER_LEFT" spacing="12.0">
@@ -64,7 +64,7 @@
                         <VBox spacing="3.0" styleClass="summary-tile">
                             <children>
                                 <Label styleClass="stat-label" text="RUNNING TOTAL" />
-                                <Label fx:id="runningTotalLabel" styleClass="bill-total" text="$0.00" />
+                                <Label fx:id="runningTotalLabel" styleClass="bill-total" text="\$0.00" />
                             </children>
                         </VBox>
                         <VBox spacing="3.0" styleClass="summary-tile">
