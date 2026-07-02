@@ -64,7 +64,7 @@
                         <VBox spacing="3.0" styleClass="summary-tile">
                             <children>
                                 <Label styleClass="stat-label" text="RUNNING TOTAL" />
-                                <Label fx:id="runningTotalLabel" styleClass="bill-total" text="\$0.00" />
+                                <Label fx:id="runningTotalLabel" styleClass="bill-total" text="$0.00" />
                             </children>
                         </VBox>
                         <VBox spacing="3.0" styleClass="summary-tile">

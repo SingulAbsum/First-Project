@@ -55,19 +55,19 @@
                         <VBox spacing="3.0" styleClass="summary-tile" HBox.hgrow="ALWAYS">
                             <children>
                                 <Label styleClass="stat-label" text="REVENUE" />
-                                <Label fx:id="revenueLabel" styleClass="bill-total" text="\$0.00" />
+                                <Label fx:id="revenueLabel" styleClass="bill-total" text="$0.00" />
                             </children>
                         </VBox>
                         <VBox spacing="3.0" styleClass="summary-tile" HBox.hgrow="ALWAYS">
                             <children>
                                 <Label styleClass="stat-label" text="EXPENSE" />
-                                <Label fx:id="expenseLabel" styleClass="bill-total" text="\$0.00" />
+                                <Label fx:id="expenseLabel" styleClass="bill-total" text="$0.00" />
                             </children>
                         </VBox>
                         <VBox spacing="3.0" styleClass="summary-tile" HBox.hgrow="ALWAYS">
                             <children>
                                 <Label styleClass="stat-label" text="BALANCE" />
-                                <Label fx:id="balanceLabel" styleClass="bill-total" text="\$0.00" />
+                                <Label fx:id="balanceLabel" styleClass="bill-total" text="$0.00" />
                             </children>
                         </VBox>
                     </children>
